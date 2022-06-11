@@ -1,0 +1,52 @@
+Prototype:
+
+void FishAreFriends_NotFood(int, int, int, int, int, int, int, int*, int*);
+
+Function:
+
+void FishAreFriends_NotFood(int FoodClosestDistance,	/* input - closest food in pixels */
+	int FoodClosestAngle,		/* input - angle in degrees towards closest food */
+	int RobotClosestDistance,	/* input - closest other robot, in pixels */
+	int RobotClosestAngle,		/* input - angle in degrees towards closest robot */
+	int SharkClosestDistance,	/* input - closest shark in pixels */
+	int SharkClosestAngle,		/* input - angle in degrees towards closest shark */
+	int CurrentRobotEnergy,		/* input - this robot's current energy (50 - 255) */
+	int* RobotMoveAngle,		/* output - angle in degrees to move */
+	int* RobotExpendEnergy)		/* output - energy to expend in motion (cannot exceed Current-50) */
+
+{
+	
+	if (SharkClosestDistance < 100)
+	{
+		(*RobotMoveAngle) = (180 + SharkClosestAngle) % 360;
+		if (CurrentRobotEnergy < 90)
+		{
+			(*RobotMoveAngle) = FoodClosestAngle;
+			(*RobotExpendEnergy) = 20;
+		}
+		else if (CurrentRobotEnergy < 150)
+			(*RobotExpendEnergy) = 25;
+		else
+			(*RobotExpendEnergy) = 30;
+	}
+	else if(CurrentRobotEnergy < 120)
+	{
+		(*RobotMoveAngle) = FoodClosestAngle;
+		(*RobotExpendEnergy) = 15;
+	}
+	else if (SharkClosestDistance > 200)
+	{
+		(*RobotMoveAngle) = FoodClosestAngle;
+		(*RobotExpendEnergy) = 5;
+	}
+	else if (CurrentRobotEnergy > 200)
+	{
+		(*RobotMoveAngle) = (180 + SharkClosestAngle) % 360;
+		(*RobotExpendEnergy) = 5;
+	}
+	else
+	{
+		(*RobotMoveAngle) = FoodClosestAngle;
+		(*RobotExpendEnergy) = 7;
+	}
+}
